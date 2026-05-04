@@ -3,7 +3,7 @@ EFZ Checker Script
 ------------------
 
 This script compares a list of members (input/input.csv) against a reference file
-(efzFile/llist.csv) to determine whether a valid "Führungszeugnis" (EFZ) exists.
+(efzFile/list.csv) to determine whether a valid "Führungszeugnis" (EFZ) exists.
 Vibecoded the shit out of this to quickly get a working tool, bear with me.
 
 OUTPUT:
@@ -18,6 +18,7 @@ LOGIC:
     - AND the latest date found in those rows is >= 2026-05-26
 
 - Otherwise, they are marked INVALID
+- afterwards, a report is created in output/report.txt
 
 FOLDER STRUCTURE:
 main.py
