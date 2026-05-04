@@ -12,7 +12,7 @@ OUTPUT:
 LOGIC:
 - Only members with age >= 16 are checked
 - A member is VALID if:
-    - At least one row in llist.csv contains:
+    - At least one row in list.csv contains:
         - their member ID
         - the term "Führungszeugnis"
     - AND the latest date found in those rows is >= 2026-05-26
@@ -23,7 +23,7 @@ LOGIC:
 FOLDER STRUCTURE:
 main.py
 input/input.csv
-efzFile/llist.csv
+efzFile/list.csv
 output/report.txt
 """
 
@@ -36,14 +36,41 @@ from datetime import datetime
 # Base directory (where main.py is located)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# File paths
-INPUT_FILE = os.path.join(BASE_DIR, "input", "input.csv")
-EFZ_FILE = os.path.join(BASE_DIR, "efzFile", "list.csv")
-OUTPUT_FILE = os.path.join(BASE_DIR, "output", "report.txt")
-
 # Minimum valid EFZ date
 DATE_THRESHOLD = datetime.strptime("2026-05-26", "%Y-%m-%d")
 
+
+# === FILE DETECTION ===
+
+def get_single_csv_file(folder_path):
+    """
+    Returns the single CSV file in a folder.
+    
+    Raises:
+        Exception if no CSV or more than one CSV is found
+    """
+    files = [f for f in os.listdir(folder_path) if f.lower().endswith(".csv")]
+
+    if len(files) == 0:
+        raise Exception(f"Kein CSV-File gefunden im Ordner: {folder_path}")
+    elif len(files) > 1:
+        raise Exception(f"Mehr als ein CSV-File im Ordner: {folder_path}")
+
+    return os.path.join(folder_path, files[0])
+
+
+# Detect files automatically
+INPUT_DIR = os.path.join(BASE_DIR, "input")
+EFZ_DIR = os.path.join(BASE_DIR, "efzFile")
+
+try:
+    INPUT_FILE = get_single_csv_file(INPUT_DIR)
+    EFZ_FILE = get_single_csv_file(EFZ_DIR)
+except Exception as e:
+    print("Fehler:", e)
+    exit(1)
+    
+OUTPUT_FILE = os.path.join(BASE_DIR, "output", "report.txt")
 
 # === HELPER FUNCTIONS ===
 

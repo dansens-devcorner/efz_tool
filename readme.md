@@ -1,11 +1,12 @@
 # EFZ Checker – User Instructions
 
+If you don't know how to run a Python script, ask someone who does.
 
-If you don't know, how to run a python script, go and find someone that knows to help you. 
+---
 
 ## 📁 Setup
 
-Make sure your folder structure looks like this:
+Project structure:
 
 ```
 project/
@@ -13,96 +14,78 @@ project/
 ├── main.py
 ├── input/
 ├── efzFile/
-│   └── llist.csv
 └── output/
 ```
 
----
-
-## 📊 Prepare Input File (from Excel)
-
-You must create `input.csv` manually from Excel.
-
-### 1. Format your Excel file
-
-Only keep these 3 columns:
-
-| Name           | MemberID | Age |
-| -------------- | -------- | --- |
-| Max Mustermann | 1234     | 27  |
-| Peter Muster   | 54321    | 18  |
-
-### Important:
-
-* Column order must be:
-
-  1. Name
-  2. Member ID
-  3. Age
-* Delete all other columns
-* Remove empty rows
-* No merged cells or formatting
-* Member ID must be 4–5 digits (numbers only)
-* Age must be a number
+⚠️ IMPORTANT:
+- Each folder (`input/`, `efzFile/`) must contain EXACTLY ONE CSV file
+- If there are 0 or more than 1 CSV files → script will fail
 
 ---
 
-### 2. Export as CSV
+## 📊 Input File (Excel → CSV)
 
-In Excel:
+### Step 1: Excel format
 
-1. Click **File → Save As**
-2. Choose:
+Keep ONLY these columns:
 
-   ```
-   CSV UTF-8 (Comma delimited) (*.csv)
-   ```
-3. Save as:
+| Name | MemberID | Age |
+|------|----------|-----|
+| Max Mustermann | 1234 | 27 |
+| Peter Muster | 54321 | 18 |
 
-   ```
-   input.csv
-   ```
-4. Move the file to:
-
-   ```
-   input/input.csv
-   ```
+Rules:
+- Column order must be: Name → MemberID → Age
+- No extra columns
+- No empty rows
+- No formatting / merged cells
+- MemberID = 4–5 digit number only
+- Age = number
 
 ---
 
-### 3. Check delimiter (VERY IMPORTANT)
+### Step 2: Export CSV
 
-Open the file in a text editor.
+Excel:
+- File → Save As
+- Format: CSV UTF-8 (Comma delimited)
+- Save into: `input/`
 
-It must look like this:
+No specific filename needed.
+
+---
+
+### Step 3: IMPORTANT delimiter check
+
+File MUST look like this:
 
 ```
 Max Mustermann;1234;27
 Peter Muster;54321;18
 ```
 
-If you see commas instead:
+If you see commas:
 
 ```
 Max Mustermann,1234,27
 ```
 
-Replace them with semicolons (`;`) or export again with correct regional settings.
+→ fix export settings or replace with `;`
 
 ---
 
-## 📊 Reference File (from eVewa)
+## 📊 Reference File (eVewa export)
 
-Get the full export from eVewa for all members(Excel mit beziehungen).
-Export it as csv. No need to sanitize the data this time.
+- Export full dataset from eVewa (Excel export)
+- Save as CSV
+- Put into:
+  `efzFile/`
 
-save as efzFile/list.csv
+No manual cleanup required.
 
+---
 
-
-## ▶️ Run the Script
-
-Open a terminal in the project folder and run:
+## ▶️ Run Script
 
 ```
 python main.py
@@ -112,8 +95,6 @@ python main.py
 
 ## 📄 Output
 
-The result will be written to:
-
 ```
 output/report.txt
 ```
@@ -122,49 +103,46 @@ output/report.txt
 
 ## 📅 What gets checked
 
-* Only people aged **16 or older**
-* Member ID is matched against `list.csv`
-* Script searches for **"Führungszeugnis"**
-* Latest date in matching entries is used
+- Only people aged ≥ 16
+- MemberID matched against reference CSV
+- Searches for "Führungszeugnis"
+- Uses latest found date
 
 ---
 
-## ✅ Result Types
+## ✅ Results
 
-### Valid:
-
+### VALID
 ```
 Max Mustermann(1234), 27 hat ein EFZ gültig bis 26.04.27
 ```
 
-### Invalid:
-
+### INVALID
 ```
 Max Mustermann(1234), 18 hat kein EFZ
-Peter Müller(54321), 29 hat ein EFZ, welches zum 14.02.2024 abgelaufen ist
+Peter Muster(54321), 29 hat ein EFZ, welches zum 14.02.2024 abgelaufen ist
 ```
 
-### Errors:
-
-* Only shown if something could not be processed
-* Under-16 entries are NOT listed here
+### ERRORS
+- Only processing issues
+- Under-16 entries are ignored (not reported)
 
 ---
 
 ## 📌 Check Date
 
-EFZ validity is checked against:
-
 ```
 2026-05-26
 ```
 
-(Defined inside `main.py` and can be changed there)
+Defined in `main.py` (editable)
 
 ---
 
 ## ⚠️ Notes
 
-* Multiple EFZ entries per person are supported
-* The **latest date always counts**
-* People under 16 are ignored completely
+- Multiple EFZ entries per person supported
+- Latest date always wins
+- Script fails if:
+  - no CSV found in folder
+  - more than one CSV found in folder
