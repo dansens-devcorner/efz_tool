@@ -1,18 +1,13 @@
-# Ignore all CSV files (input + efz reference if desired)
-*.csv
+# Ignore all files inside these folders
+input/*
+efzFile/*
+output/*
 
-# Ignore generated reports
-*.txt
+# But keep the folders themselves
+!input/.gitkeep
+!efzFile/.gitkeep
+!output/.gitkeep
 
-# But keep folder structure
-!input/
-!efzFile/
-!output/
-
-# Keep folders even if empty
-input/.gitkeep
-efzFile/.gitkeep
-output/.gitkeep
 
 # Python cache / artifacts
 __pycache__/
