@@ -1,0 +1,28 @@
+# Ignore all CSV files (input + efz reference if desired)
+*.csv
+
+# Ignore generated reports
+*.txt
+
+# But keep folder structure
+!input/
+!efzFile/
+!output/
+
+# Keep folders even if empty
+input/.gitkeep
+efzFile/.gitkeep
+output/.gitkeep
+
+# Python cache / artifacts
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+venv/
+.env/
+
+# OS files
+.DS_Store
+Thumbs.db
